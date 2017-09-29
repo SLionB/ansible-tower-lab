@@ -1,0 +1,4 @@
+---
+- name: Load balancer tasks placeholder
+  debug:
+    msg: "Do loadbalancers!"

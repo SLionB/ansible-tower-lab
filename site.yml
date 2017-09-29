@@ -4,3 +4,4 @@
     - webserver
     - dbserver
     - firewall
+    - loadbalancer
