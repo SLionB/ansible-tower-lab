@@ -1,2 +1,2 @@
-# ansible-tower-samples
-Ansible Tower Playbook Samples
+# ansible-tower-lab
+Ansible Tower Playbook Lab Code
