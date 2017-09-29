@@ -10,6 +10,7 @@
 #   tasks:
 #
   - name: Create server
+    delegate_to: localhost
     netscaler_server:
       nsip: "{{ ansible_host|default(inventory_hostname) }}"
       nitro_user: "{{ ansible_user }}"
@@ -19,6 +20,7 @@
       ipaddress: 192.168.184.190
 
   - name: Setup HTTPS service group
+    delegate_to: localhost
     netscaler_servicegroup:
       nsip: "{{ ansible_host|default(inventory_hostname) }}"
       nitro_user: "{{ ansible_user }}"
@@ -36,6 +38,7 @@
          weight: 50
 
   - name: Setup VIP
+    delegate_to: localhost
     netscaler_lb_vserver:
       nsip: "{{ ansible_host|default(inventory_hostname) }}"
       nitro_user: "{{ ansible_user }}"
