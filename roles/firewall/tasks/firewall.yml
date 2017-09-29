@@ -1,0 +1,46 @@
+#
+# This playbook creates network objects on FortiGate VM
+#
+---
+
+# - hosts: firewall
+#   connection: local
+#   gather_facts: False
+#
+#   tasks:
+  - name: Register webservers subnet
+    delegate_to: localhost
+    fortios_address:
+      host: "{{ ansible_host|default(inventory_hostname) }}"
+      username: "{{ ansible_user }}"
+      password: "{{ ansible_pass }}"
+      state: present
+      name: Webserver_Subnet
+      type: ipmask
+      value: 10.10.101.0/24
+      comment: "This is the webservers' subnet"
+
+  - name: Register database subnet
+    delegate_to: localhost
+    fortios_address:
+      host: "{{ ansible_host|default(inventory_hostname) }}"
+      username: "{{ ansible_user }}"
+      password: "{{ ansible_pass }}"
+      state: present
+      name: Database_Subnet
+      type: ipmask
+      value: 10.10.102.0/24
+      comment: "This is the DB servers' subnet"
+
+  - name: Permit traffic from webservers to DB servers
+    delegate_to: localhost
+    fortios_ipv4_policy:
+      host: "{{ ansible_host|default(inventory_hostname) }}"
+      username: "{{ ansible_user }}"
+      password: "{{ ansible_pass }}"
+      state: present
+      id: 11
+      src_addr: Webserver_Subnet
+      dst_addr: Database_Subnet
+      service: DNS
+      policy_action: accept

@@ -1,0 +1,4 @@
+---
+- name: Webserver tasks placeholder
+  debug:
+    msg: "Do webservers!"
