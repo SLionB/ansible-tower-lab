@@ -1,4 +1,51 @@
+#
+# This playbook creates a whole structure in NS to load-balance WWW
+#
 ---
-- name: Load balancer tasks placeholder
-  debug:
-    msg: "Do loadbalancers!"
+
+# - hosts: all
+#   connection: local
+#   gather_facts: False
+#
+#   tasks:
+#
+  - name: Create server
+    netscaler_server:
+      nsip: "{{ ansible_host|default(inventory_hostname) }}"
+      nitro_user: "{{ ansible_user }}"
+      nitro_pass: "{{ ansible_pass }}"
+      state: present
+      name: WWW1
+      ipaddress: 192.168.184.190
+
+  - name: Setup HTTPS service group
+    netscaler_servicegroup:
+      nsip: "{{ ansible_host|default(inventory_hostname) }}"
+      nitro_user: "{{ ansible_user }}"
+      nitro_pass: "{{ ansible_pass }}"
+      state: present
+
+      servicegroupname: WWW_LBSG
+      servicetype: SSL
+      servicemembers:
+       - servername: WWW1
+         port: 443
+         weight: 10
+      monitorbindings:
+       - monitorname: https
+         weight: 50
+
+  - name: Setup VIP
+    netscaler_lb_vserver:
+      nsip: "{{ ansible_host|default(inventory_hostname) }}"
+      nitro_user: "{{ ansible_user }}"
+      nitro_pass: "{{ ansible_pass }}"
+      state: present
+
+      name: WWW_LBVS
+      servicetype: HTTP
+      ipv46: 192.168.184.192
+      port: 80
+      timeout: 10
+      servicegroupbindings:
+        - servicegroupname: WWW_LBSG
