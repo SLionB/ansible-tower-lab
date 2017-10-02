@@ -1,7 +1,13 @@
 ---
-- hosts: all
+- hosts: webserver
   roles:
     - webserver
+- hosts: dbserver
+  roles:
     - dbserver
+- hosts: firewall
+  roles:
     - firewall
+- hosts: loadbalancer
+  roles:
     - loadbalancer
